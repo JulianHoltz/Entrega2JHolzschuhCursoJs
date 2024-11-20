@@ -24,21 +24,21 @@ Esto se debe mostrar en una lista, y dar el total y avisarme si me paso del pres
 #################################################################################################################################
 MENU
 */
-
-
-let loop = false;
-
+function menu(){
+    let loop = false;
 while(loop == false){
     alert("Seleccione una opcion del menu para Operar");
-    let opcion = parseInt(prompt("1 - Crear obra nueva; 2 - Crear gasto nuevo; 3 - Eliminar gasto existente, 4 - Imprimir gastos"));
+    let opcion = parseInt(prompt("1 - Crear obra nueva; 2 - Crear gasto nuevo; 3 - Eliminar gasto existente, 4 - Listado de Gastos, 5 - Listado de Obras"));
 
     switch(opcion){
         case 1:
             alert("Elegiste la opcion 1");
+            obraNueva();
             loop = true;
             break;
         case 2:
             alert("Elegiste la opcion 2");
+            gastoNuevo()
             loop = true;
             break;
         case 3:
@@ -49,10 +49,15 @@ while(loop == false){
             alert("Elegiste la opcion 4");
             loop = true;
             break;
+        case 5:
+            alert("Elegiste la opcion 4");
+            loop = true;
+            break;
         default:
             alert("Ninguna opcion valida");
             break;
     }
+}
 }
 /*
 #################################################################################################################################
@@ -84,7 +89,9 @@ class gasto{
         this.cantidad = cantidad;
         this.pUnitArs = pUnitArs;
         this.conversionArsUsd = conversionArsUsd;
+        this.montoArs = pUnitArs * cantidad;
         this.montoUsd = montoUsd;
+        
 
         gasto.arrayGastos.push(this);//almacenamiento de gastos
     }
@@ -104,13 +111,67 @@ function imprimirGastos(obraSelec){
 }
 
 
+/*
+#################################################################################################################################
+1 - CREAR UNA OBRA NUEVA
+*/
+
+function obraNueva(){
+    const nombre = prompt("Ingrese el nombre de la obra");
+    const fecha = prompt("Ingrese la fecha de inicio de la obra en formato: dd/mm/aaaa");
+    const descripcion = prompt("Ingrese una descripcion si lo desea");
+    const presupuesto = parseFloat(prompt("Ingrese el monto en AR$ destinado para la obra"));
+
+    const obraN = new obra(nombre, fecha, descripcion, presupuesto);
+
+}
+
+/*
+#################################################################################################################################
+2 - CREAR GASTO
+*/
+
+function gastoNuevo(){
+    const nombre = prompt("Ingrese el nombre de la obra a la que pertenece el gasto"); //esto deberia ser un desplegable con op.
+    const concepto = prompt("Ingrese el concepto del gasto");
+    const rubro = prompt("Ingrese el rubro al cual pertence el gasto");
+    let fecha = prompt("Ingrese la fecha del gasto formato: dd/mm/aaaa, si no ingresa nada se tomara la fecha actual.");
+    const unidad = prompt("Ingrese la undidad en la cual se computa el gasto, ej: m, un, gl");
+    const cantidad = parseInt(prompt("Ingrese la cantidad de unidades, si es global [gl] ingrese 1"));
+    const pUnitArs = parseFloat(prompt("Ingrese el precio unitario del gasto, en caso de ser global [gl] ingrese el total"));
+    const presupuesto = parseFloat(prompt("Ingrese el monto en AR$ destinado para la obra"));
+    const conversion = parseFloat(prompt("Ingrese la cotizacion de dolar que se utilizo para la compra"));
+
+    if(fecha == ""){
+        fecha = obtenerFechaActual()
+    }
+
+    const monto = (cantidad * pUnitArs) / conversion
+    
+    const gastoN = new gasto(nombre, concepto, rubro, fecha, unidad, cantidad, pUnitArs, presupuesto, conversion, monto);
+}
+/*
+#################################################################################################################################
+OBTENER FECHA EN FORMATO NORMAL
+*/
+
+const obtenerFechaActual = () => {
+    const fecha = new Date();
+    const dia = String(fecha.getDate()).padStart(2, '0'); // Asegura dos dígitos
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const anio = fecha.getFullYear();
+
+    return `${dia}/${mes}/${anio}`;
+};
 
 
 /*
 #################################################################################################################################
 DATOS PARA TEST
 */
-const obra1 = new obra("Las Golondrinas C144", "date().now", "VIvienda en country Las Golondrinas, Bs. As.", 350000000);
+menu();
+
+const obra1 = new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000);
 const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 const gasto2 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 const gasto3 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
@@ -125,3 +186,4 @@ const gasto4 = new gasto("Las Pepas", "cemento loma negra", "Estructura", "date(
 // console.log( gasto.arrayGastos);
 
 imprimirGastos("Las Golondrinas C144");
+console.log(obra.arrayObras);
