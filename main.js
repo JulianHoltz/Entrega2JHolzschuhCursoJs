@@ -24,41 +24,7 @@ Esto se debe mostrar en una lista, y dar el total y avisarme si me paso del pres
 #################################################################################################################################
 MENU
 */
-function menu(){
-    let loop = false;
-while(loop == false){
-    alert("Seleccione una opcion del menu para Operar");
-    let opcion = parseInt(prompt("1 - Crear obra nueva; 2 - Crear gasto nuevo; 3 - Eliminar gasto existente, 4 - Listado de Gastos, 5 - Listado de Obras"));
 
-    switch(opcion){
-        case 1:
-            alert("Elegiste la opcion 1");
-            obraNueva();
-            loop = true;
-            break;
-        case 2:
-            alert("Elegiste la opcion 2");
-            gastoNuevo()
-            loop = true;
-            break;
-        case 3:
-            alert("Elegiste la opcion 3");
-            loop = true;
-            break;
-        case 4:
-            alert("Elegiste la opcion 4");
-            loop = true;
-            break;
-        case 5:
-            alert("Elegiste la opcion 4");
-            loop = true;
-            break;
-        default:
-            alert("Ninguna opcion valida");
-            break;
-    }
-}
-}
 /*
 #################################################################################################################################
 CLASES Y CONSTRUCTORES
@@ -116,14 +82,18 @@ function imprimirGastos(obraSelec){
 1 - CREAR UNA OBRA NUEVA
 */
 
+const plusButton = document.querySelector("#newConstruction");
+plusButton.addEventListener("click", event =>{
+    obraNueva();
+})//hay que validar que si hay una creacion en proceso no te deje agregar otra...
+
+
 function obraNueva(){
-    const nombre = prompt("Ingrese el nombre de la obra");
-    const fecha = prompt("Ingrese la fecha de inicio de la obra en formato: dd/mm/aaaa");
-    const descripcion = prompt("Ingrese una descripcion si lo desea");
-    const presupuesto = parseFloat(prompt("Ingrese el monto en AR$ destinado para la obra"));
 
-    const obraN = new obra(nombre, fecha, descripcion, presupuesto);
 
+    //Crear etiqueta de obra
+    const box = document.getElementById("constructionList");
+    box.innerHTML = box.innerHTML + `<div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div>`;
 }
 
 /*
@@ -169,7 +139,6 @@ const obtenerFechaActual = () => {
 #################################################################################################################################
 DATOS PARA TEST
 */
-menu();
 
 const obra1 = new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000);
 const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
