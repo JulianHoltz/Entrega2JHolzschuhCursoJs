@@ -22,8 +22,11 @@ Esto se debe mostrar en una lista, y dar el total y avisarme si me paso del pres
 
 /*
 #################################################################################################################################
-MENU
+INICIO
 */
+const idHtmlObra = document.getElementById("constructionList");
+const idHtmlGasto = document.getElementById("ExpensesList");
+
 
 /*
 #################################################################################################################################
@@ -98,6 +101,53 @@ function obraNueva(){
 
 /*
 #################################################################################################################################
+RENDERIZAR TABLA DE OBRAS
+*/
+
+function tableRender(htmlId){
+    let  HTML = "";
+    if (htmlId == idHtmlObra){
+        idHtmlObra.innerHTML = "";
+        HTML = idHtmlObra;
+
+        for(const obrai of obra) {
+            const tr = document.createElement("tr");
+                tr.innerHTML = `
+                <td>${obra.nombreObra}</td>
+                <td>$${obra.fechaDeInicio}</td>
+                <td>${obra.Descripcion}</td>
+                <td>${obra.presupuestoGeneral}</td>
+                `;
+                HTML.append(tr);
+         }
+    }else if(htmlId == idHtmlGasto){
+        idHtmlGasto.innerHTML = "";
+        HTML = idHtmlGasto;
+
+        for(const gasto of gastos) {
+            const tr = document.createElement("tr");
+                tr.innerHTML = `
+                <td>${gasto.obra}</td>
+                <td>$${gasto.concepto}</td>
+                <td>${gasto.rubro}</td>
+                <td>${gasto.fecha}</td>
+                <td>${gasto.unidad}</td>
+                <td>${gasto.cantidad}</td>
+                <td>${gasto.pUnitArs}</td>
+                <td>${gasto.conversionArsUsd}</td>
+                <td>${gasto.montoArs}</td>
+                <td>${gasto.montoUsd}</td>
+                `;
+                HTML.append(tr);
+        }
+    }else {
+        return;
+    }
+}
+
+
+/*
+#################################################################################################################################
 2 - CREAR GASTO
 */
 
@@ -141,10 +191,16 @@ DATOS PARA TEST
 */
 
 const obra1 = new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000);
-const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-const gasto2 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-const gasto3 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-const gasto4 = new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
+const gastos = [
+    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
+    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
+    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
+    new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
+]
+// const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
+// const gasto2 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
+// const gasto3 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
+// const gasto4 = new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 
 
 
@@ -156,3 +212,7 @@ const gasto4 = new gasto("Las Pepas", "cemento loma negra", "Estructura", "date(
 
 imprimirGastos("Las Golondrinas C144");
 console.log(obra.arrayObras);
+
+tableRender(idHtmlGasto);
+
+

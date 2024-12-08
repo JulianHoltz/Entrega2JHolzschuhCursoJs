@@ -57,3 +57,10 @@
     width: 90VW;
     border: 2px solid red;
 }
+
+td {
+    width: auto;
+    padding: 5px;
+    height: 40px;
+    border: 2px solid black;
+}
