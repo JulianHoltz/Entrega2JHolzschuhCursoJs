@@ -79,7 +79,6 @@ function imprimirGastos(obraSelec){
     console.log(filtroObra);
 }
 
-
 /*
 #################################################################################################################################
 1 - CREAR UNA OBRA NUEVA
@@ -87,7 +86,12 @@ function imprimirGastos(obraSelec){
 
 const plusButton = document.querySelector("#newConstruction");
 plusButton.addEventListener("click", event =>{
-    obraNueva();
+    const inputs = document.querySelectorAll(".columnContent");
+    if(inputs.length <= 0){
+        obraNueva();
+    } else{
+        return;
+    }
 })//hay que validar que si hay una creacion en proceso no te deje agregar otra...
 
 
@@ -96,9 +100,34 @@ function obraNueva(){
 
     //Crear etiqueta de obra
     const box = document.getElementById("constructionList");
-    box.innerHTML = box.innerHTML + `<div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div><div class=columnContent><input type="text"></div>`;
+    box.innerHTML = box.innerHTML + `
+        <td class=columnContent><input class=input type="text"></td>
+        <td class=columnContent><input class=input type="text"></td>
+        <td class=columnContent><input class=input type="text"></td>
+        <td class=columnContent><input class=input type="text"></td>
+        <input id=submit type="submit">
+        `;
+        saveObraNueva()
 }
 
+function saveObraNueva(){
+    const submitButton = document.querySelector("#submit");
+    submitButton.addEventListener("click", event =>{
+        const inputs = document.querySelectorAll(".input");
+        if(inputs.length >= 0){
+            if(inputs[0].value != "" && inputs[1].value != "" && inputs[2].value != "" && inputs[3].value != ""){
+            obras.push(new obra(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value),);
+            tableRender(idHtmlObra);
+            localStorage.setItem("obras", JSON.stringify(obras));
+            } else {
+                return;
+            }
+    
+        } else{
+            return;
+        }
+    });
+};
 /*
 #################################################################################################################################
 RENDERIZAR TABLA DE OBRAS
@@ -107,36 +136,56 @@ RENDERIZAR TABLA DE OBRAS
 function tableRender(htmlId){
     let  HTML = "";
     if (htmlId == idHtmlObra){
-        idHtmlObra.innerHTML = "";
+        idHtmlObra.innerHTML = `
+        <tr>
+        <th class=columnTitle><a>Nombre</a></th>
+        <th class=columnTitle><a>Fecha</a></th>
+        <th class=columnTitle><a>Descripcion</a></th>
+        <th class=columnTitle><a>Presupuesto</a></th>
+        </tr>
+        `;
         HTML = idHtmlObra;
 
-        for(const obrai of obra) {
+        for(const obra of obras) {
             const tr = document.createElement("tr");
                 tr.innerHTML = `
                 <td>${obra.nombreObra}</td>
-                <td>$${obra.fechaDeInicio}</td>
+                <td>${obra.fechaDeInicio}</td>
                 <td>${obra.Descripcion}</td>
-                <td>${obra.presupuestoGeneral}</td>
+                <td>AR$ ${obra.presupuestoGeneral}</td>
                 `;
                 HTML.append(tr);
          }
     }else if(htmlId == idHtmlGasto){
-        idHtmlGasto.innerHTML = "";
+        idHtmlGasto.innerHTML = `
+        <tr>
+        <th class=columnTitle><a>Obra</a></th>
+        <th class=columnTitle><a>Concepto</a></th>
+        <th class=columnTitle><a>Rubro</a></th>
+        <th class=columnTitle><a>Fecha</a></th>
+        <th class=columnTitle><a>Unidad</a></th>
+        <th class=columnTitle><a>Cantidad</a></th>
+        <th class=columnTitle><a>Precio Unitario</a></th>
+        <th class=columnTitle><a>Conversion</a></th>
+        <th class=columnTitle><a>Monto</a></th>
+        <th class=columnTitle><a>Monto U$D</a></th>
+        </tr>
+        `;
         HTML = idHtmlGasto;
 
         for(const gasto of gastos) {
             const tr = document.createElement("tr");
                 tr.innerHTML = `
                 <td>${gasto.obra}</td>
-                <td>$${gasto.concepto}</td>
+                <td>${gasto.concepto}</td>
                 <td>${gasto.rubro}</td>
                 <td>${gasto.fecha}</td>
                 <td>${gasto.unidad}</td>
                 <td>${gasto.cantidad}</td>
-                <td>${gasto.pUnitArs}</td>
+                <td>AR$ ${gasto.pUnitArs}</td>
                 <td>${gasto.conversionArsUsd}</td>
-                <td>${gasto.montoArs}</td>
-                <td>${gasto.montoUsd}</td>
+                <td>AR$ ${gasto.montoArs}</td>
+                <td>U$D ${gasto.montoUsd}</td>
                 `;
                 HTML.append(tr);
         }
@@ -187,16 +236,34 @@ const obtenerFechaActual = () => {
 
 /*
 #################################################################################################################################
+CARGA DE DATOS ALMACENADOS
+*/
+const obras = [];
+if(localStorage.getItem("obras") != null){
+    const localSavedObras = JSON.parse(localStorage.getItem("obras"));
+    for (const savedObra of localSavedObras){
+        obras.push(new obra(savedObra.nombreObra, savedObra.fechaDeInicio, savedObra.Descripcion, savedObra.presupuestoGeneral));
+    };
+
+} else {
+    obras.push(
+        new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000),
+    );
+}
+
+
+/*
+#################################################################################################################################
 DATOS PARA TEST
 */
 
-const obra1 = new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000);
+
 const gastos = [
     new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
     new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
     new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
     new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
-]
+];
 // const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 // const gasto2 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 // const gasto3 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
@@ -213,6 +280,7 @@ const gastos = [
 imprimirGastos("Las Golondrinas C144");
 console.log(obra.arrayObras);
 
+tableRender(idHtmlObra);
 tableRender(idHtmlGasto);
 
 

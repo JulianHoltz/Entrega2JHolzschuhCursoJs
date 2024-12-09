@@ -26,37 +26,7 @@
     border-radius: 10px;
 }
 
-#constructionList {
-    display: grid;
-    width: 70%;
-    grid-template-columns: 25% 25% 25% 25%;
-}
 
-.columnTitle{
-    display: flex;
-    height: 50px;
-    width: 200px;
-    border: 2px solid blue;
-    border-radius: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.columnContent{
-    display: flex;
-    height: 50px;
-    width: 200px;
-    border: 2px solid orange;
-    border-radius: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-#obraBox{
-    height: 300px;
-    width: 90VW;
-    border: 2px solid red;
-}
 
 td {
     width: auto;
