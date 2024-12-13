@@ -1,0 +1,14 @@
+[
+    {
+        "nombreObra": "Las Golondrinas C144",
+        "fechaDeInicio": "date().now", 
+        "Descripcion": "Vivienda en country Las Golondrinas, Bs. As.",
+        "presupuestoGeneral": 350000000
+    },
+    {
+        "nombreObra": "Torre ONE",
+        "fechaDeInicio": "date().now", 
+        "Descripcion": "Torre Vivienda Multifamiliar en Belgrano, Bs. As.",
+        "presupuestoGeneral": 500000000
+    }
+]

@@ -1,7 +1,7 @@
 
 
 #constructionListBox{
-    height: 300px;
+    height: auto;
     width: 90VW;
     border: 2px solid red;
     display: flex;
@@ -33,4 +33,31 @@ td {
     padding: 5px;
     height: 40px;
     border: 2px solid black;
+}
+
+
+#expensesListBox{
+    height: auto;
+    width: 90VW;
+    border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#expensesListTitleBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.plusButton2{
+    height: 50px;
+    width: 50px;
+    border: 2px solid blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
 }

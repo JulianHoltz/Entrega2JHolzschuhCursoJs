@@ -1,0 +1,50 @@
+[
+    {
+        "obra": "Las Golondrinas C144",
+        "concepto": "cemento loma negra", 
+        "rubro": "Estructura",
+        "fecha": "date().now",
+        "unidad": "un",
+        "cantidad": 40, 
+        "pUnitArs": 10500,
+        "conversionArsUsd": 1040,
+        "montoArs": "", 
+        "montoUsd": ""
+    },
+    {
+        "obra": "Las Golondrinas C144",
+        "concepto": "acero", 
+        "rubro": "Estructura",
+        "fecha": "date().now",
+        "unidad": "kg",
+        "cantidad": 8500, 
+        "pUnitArs": 4320,
+        "conversionArsUsd": 1035,
+        "montoArs": "", 
+        "montoUsd": ""
+    },
+    {
+        "obra": "Las Golondrinas C144",
+        "concepto": "alquieler excavadora", 
+        "rubro": "Movimiento de suelos",
+        "fecha": "date().now",
+        "unidad": "dias",
+        "cantidad": 3, 
+        "pUnitArs": 300000,
+        "conversionArsUsd": 1180,
+        "montoArs": "", 
+        "montoUsd": ""
+    },
+    {
+        "obra": "Torre ONE",
+        "concepto": "cemento loma negra", 
+        "rubro": "Estructura",
+        "fecha": "date().now",
+        "unidad": "un",
+        "cantidad": 120, 
+        "pUnitArs": 9700,
+        "conversionArsUsd": 1045,
+        "montoArs": "", 
+        "montoUsd": ""
+    }
+]

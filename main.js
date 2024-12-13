@@ -33,7 +33,7 @@ const idHtmlGasto = document.getElementById("ExpensesList");
 CLASES Y CONSTRUCTORES
 */
 //Objeto OBRA
-class obra{
+class Obra{
     static arrayObras = []; //array para almacenar las obras
     constructor(nombreObra, fechaDeInicio, Descripcion, presupuestoGeneral){
         this.nombreObra = nombreObra;
@@ -41,13 +41,13 @@ class obra{
         this.Descripcion = Descripcion;
         this.presupuestoGeneral = presupuestoGeneral;
 
-        obra.arrayObras.push(this);//almacenamiento de obra
+        Obra.arrayObras.push(this);//almacenamiento de obra
     }
 }
 
 
 //Objeto GASTO
-class gasto{
+class Gasto{
     static arrayGastos = []; //array para almacenar los gastos
     constructor(obra, concepto, rubro, fecha, unidad, cantidad, pUnitArs, conversionArsUsd, montoUsd ){
         this.obra = obra;
@@ -62,7 +62,7 @@ class gasto{
         this.montoUsd = montoUsd;
         
 
-        gasto.arrayGastos.push(this);//almacenamiento de gastos
+        Gasto.arrayGastos.push(this);//almacenamiento de gastos
     }
 }
 
@@ -73,7 +73,7 @@ Funcion para imprimir gastos
 */
 function imprimirGastos(obraSelec){
     // Filtrar las instancias donde obra sea "obra seleccionada"
-    const filtroObra = gasto.arrayGastos.filter(gasto => gasto.obra === obraSelec);
+    const filtroObra = Gasto.arrayGastos.filter(gasto => gasto.obra === obraSelec);
 
     // Mostrar los resultados en la consola
     console.log(filtroObra);
@@ -217,7 +217,7 @@ function gastoNuevo(){
 
     const monto = (cantidad * pUnitArs) / conversion
     
-    const gastoN = new gasto(nombre, concepto, rubro, fecha, unidad, cantidad, pUnitArs, presupuesto, conversion, monto);
+    const gastoN = new Gasto(nombre, concepto, rubro, fecha, unidad, cantidad, pUnitArs, presupuesto, conversion, monto);
 }
 /*
 #################################################################################################################################
@@ -242,45 +242,52 @@ const obras = [];
 if(localStorage.getItem("obras") != null){
     const localSavedObras = JSON.parse(localStorage.getItem("obras"));
     for (const savedObra of localSavedObras){
-        obras.push(new obra(savedObra.nombreObra, savedObra.fechaDeInicio, savedObra.Descripcion, savedObra.presupuestoGeneral));
+        obras.push(new Obra(savedObra.nombreObra, savedObra.fechaDeInicio, savedObra.Descripcion, savedObra.presupuestoGeneral));
     };
 
 } else {
-    obras.push(
-        new obra("Las Golondrinas C144", "date().now", "Vivienda en country Las Golondrinas, Bs. As.", 350000000),
-    );
-}
+    loadTestDataObras()
+    loadTestDataGastos()
+} //falta pedirle que carge los Gastos almacenados en storage
 
 
 /*
 #################################################################################################################################
-DATOS PARA TEST
+OBTENER DATOS PARA TEST "PRECARGA" JSON
 */
+const gastos = [];
+
+function loadTestDataObras(){
+    fetch("/obras.json")
+    .then((response) => response.json()) // esto convierte la respuesta JSON, no hace falta parsear!
+    .then((data) => {
+        const obraAjax = data.map(item => new Obra(item.nombreObra, item.fechaDeInicio, item.Descripcion, item.presupuestoGeneral));
+        obras.push(...obraAjax); 
+        tableRender(idHtmlObra);
+    })
+    .catch((error) => console.error("Error al cargar el archivo JSON:", error));
+};
+
+function loadTestDataGastos(){
+    fetch("/gastos.json")
+    .then((response) => response.json()) // esto convierte la respuesta JSON, no hace falta parsear!
+    .then((data) => {
+        const gastoAjax = data.map(item => new Gasto(item.obra, item.concepto, item.rubro, item.fecha, item.unidad, item.cantidad, item.pUnitArs, item.conversionArsUsd, item.montoArs, item.montoUsd));
+        gastos.push(...gastoAjax);
+        tableRender(idHtmlGasto);
+    })
+    .catch((error) => console.error("Error al cargar el archivo JSON:", error));
+};
+    
+
+    
 
 
-const gastos = [
-    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
-    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
-    new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
-    new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" ),
-];
-// const gasto1 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-// const gasto2 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-// const gasto3 = new gasto("Las Golondrinas C144", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
-// const gasto4 = new gasto("Las Pepas", "cemento loma negra", "Estructura", "date().now", "un", 40, 10500, 1120,"" );
 
 
 
+//imprimirGastos("Las Golondrinas C144");
 
-// console.log(obra1);
-// console.log(gasto1);
 
-// console.log( gasto.arrayGastos);
-
-imprimirGastos("Las Golondrinas C144");
-console.log(obra.arrayObras);
-
-tableRender(idHtmlObra);
-tableRender(idHtmlGasto);
 
 
