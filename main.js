@@ -25,7 +25,7 @@ Esto se debe mostrar en una lista, y dar el total y avisarme si me paso del pres
 INICIO
 */
 const idHtmlObra = document.getElementById("constructionList");
-const idHtmlGasto = document.getElementById("ExpensesList");
+const idHtmlGasto = document.getElementById("expensesList");
 
 
 /*
@@ -105,29 +105,149 @@ function obraNueva(){
         <td class=columnContent><input class=input type="text"></td>
         <td class=columnContent><input class=input type="text"></td>
         <td class=columnContent><input class=input type="text"></td>
-        <input id=submit type="submit">
+        <input class=button-yellow id=submit type="submit">
         `;
         saveObraNueva()
 }
 
-function saveObraNueva(){
-    const submitButton = document.querySelector("#submit");
-    submitButton.addEventListener("click", event =>{
-        const inputs = document.querySelectorAll(".input");
-        if(inputs.length >= 0){
-            if(inputs[0].value != "" && inputs[1].value != "" && inputs[2].value != "" && inputs[3].value != ""){
-            obras.push(new obra(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value),);
-            tableRender(idHtmlObra);
-            localStorage.setItem("obras", JSON.stringify(obras));
-            } else {
-                return;
-            }
+/* QUEDO OBSOLETO */
+// function saveObraNueva(){
+//     const submitButton = document.querySelector("#submit");
+//     submitButton.addEventListener("click", event =>{
+//         const inputs = document.querySelectorAll(".input");
+//         if(inputs.length >= 0){
+//             if(inputs[0].value != "" && inputs[1].value != "" && inputs[2].value != "" && inputs[3].value != ""){
+//             obras.push(new obra(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value),);
+//             tableRender(idHtmlObra);
+//             localStorage.setItem("obras", JSON.stringify(obras));
+//             } else {
+//                 return;
+//             }
     
-        } else{
+//         } else{
+//             return;
+//         }
+//     });
+// };
+
+function saveObraNueva() {
+    // Selecciona el botón de guardado
+    const submitButton = document.querySelector("#submit");
+
+    // Verifica si el botón existe
+    if (!submitButton) {
+        console.error("El botón con id 'submit' no se encuentra en el DOM.");
+        return;
+    }
+
+    // Agrega un listener al botón de guardado
+    submitButton.addEventListener("click", () => {
+        const inputs = document.querySelectorAll(".input");
+
+        // Verifica que los inputs existan
+        if (inputs.length !== 4) {
+            console.error("No se encontraron 4 inputs con la clase 'input'.");
             return;
         }
+
+        // Verifica que todos los inputs tengan valores "Aca estaria bueno mandar el alert de la libreria"
+        const values = Array.from(inputs).map(input => input.value.trim());
+        if (values.some(value => value === "")) {
+            console.warn("Todos los campos deben estar completos.");
+            return;
+        }
+
+        // Crea un nuevo objeto y lo agrega al array
+        const nuevaObra = new Obra(...values);
+        obras.push(nuevaObra);
+
+        // Actualiza la tabla
+        tableRender(idHtmlObra);
+
+        // Guarda en el localStorage
+        localStorage.setItem("obras", JSON.stringify(obras));
+
+        console.log("Obra guardada:", nuevaObra);
     });
-};
+}
+
+/*
+#################################################################################################################################
+2 - CREAR UN GASTO NUEVO
+*/
+const plusButtonG = document.querySelector("#newExpense");
+plusButtonG.addEventListener("click", event =>{
+    const inputs = document.querySelectorAll(".columnContentG");
+    if(inputs.length <= 0){
+        gastoNuevo();
+    } else{
+        return;
+    }
+})//hay que validar que si hay una creacion en proceso no te deje agregar otra...
+
+
+function gastoNuevo(){
+
+    //Crear etiqueta de gasto
+    const box = document.getElementById("expensesList");
+    box.innerHTML = box.innerHTML + `
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <td class=columnContentG><input class=inputG type="text"></td>
+        <input class=button-yellow id=submitG type="submit">
+        `;
+        saveGastoNuevo()
+}
+
+
+function saveGastoNuevo() {
+    // Selecciona el botón de guardado
+    const submitButtonG = document.querySelector("#submitG");
+
+    // Verifica si el botón existe
+    if (!submitButtonG) {
+        console.error("El botón con id 'submitG' no se encuentra en el DOM.");
+        return;
+    }
+
+    // Agrega un listener al botón de guardado
+    submitButtonG.addEventListener("click", () => {
+        const inputs = document.querySelectorAll(".inputG");
+
+        // Verifica que los inputs existan
+        if (inputs.length !== 10) {
+            console.error("No se encontraron 4 inputs con la clase 'inputG'.");
+            return;
+        }
+
+        // Verifica que todos los inputs tengan valores "Aca estaria bueno mandar el alert de la libreria"
+        const values = Array.from(inputs).map(input => input.value.trim());
+        if (values.some(value => value === "")) {
+            console.warn("Todos los campos deben estar completos.");
+            return;
+        }
+
+        // Crea un nuevo objeto y lo agrega al array
+        const nuevoGasto = new Gasto(...values);
+        gastos.push(nuevoGasto);
+
+        // Actualiza la tabla
+        tableRender(idHtmlGasto);
+
+        // Guarda en el localStorage
+        localStorage.setItem("gastos", JSON.stringify(gastos));
+
+        console.log("Gasto guardado:", nuevoGasto);
+    });
+}
+
 /*
 #################################################################################################################################
 RENDERIZAR TABLA DE OBRAS
@@ -142,20 +262,35 @@ function tableRender(htmlId){
         <th class=columnTitle><a>Fecha</a></th>
         <th class=columnTitle><a>Descripcion</a></th>
         <th class=columnTitle><a>Presupuesto</a></th>
+        <th class=columnTitle></th>
         </tr>
         `;
         HTML = idHtmlObra;
 
-        for(const obra of obras) {
+        obras.forEach((obra, index) => {
             const tr = document.createElement("tr");
-                tr.innerHTML = `
+            tr.innerHTML = `
                 <td>${obra.nombreObra}</td>
                 <td>${obra.fechaDeInicio}</td>
                 <td>${obra.Descripcion}</td>
                 <td>AR$ ${obra.presupuestoGeneral}</td>
-                `;
-                HTML.append(tr);
-         }
+                <td class="noBorder"><button id=delete class="delete-btn" data-index="${index}">Eliminar Obra</button></td>
+            `;
+            HTML.append(tr);
+        });
+
+        // Agregar eventos de click a los botones de eliminar
+        const deleteButtons = HTML.querySelectorAll(".delete-btn");
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const index = this.getAttribute("data-index"); // Obtener el índice desde el atributo data-index
+                obras.splice(index, 1); // Eliminar del array
+                tableRender(htmlId); // Volver a renderizar la tabla
+                localStorage.setItem("obras", JSON.stringify(obras));
+            });
+        });
+
+
     }else if(htmlId == idHtmlGasto){
         idHtmlGasto.innerHTML = `
         <tr>
@@ -173,9 +308,9 @@ function tableRender(htmlId){
         `;
         HTML = idHtmlGasto;
 
-        for(const gasto of gastos) {
+        gastos.forEach((gasto, index) => {
             const tr = document.createElement("tr");
-                tr.innerHTML = `
+            tr.innerHTML = `
                 <td>${gasto.obra}</td>
                 <td>${gasto.concepto}</td>
                 <td>${gasto.rubro}</td>
@@ -186,39 +321,44 @@ function tableRender(htmlId){
                 <td>${gasto.conversionArsUsd}</td>
                 <td>AR$ ${gasto.montoArs}</td>
                 <td>U$D ${gasto.montoUsd}</td>
-                `;
-                HTML.append(tr);
-        }
+                <td class="noBorder"><button id=delete class="delete-btn-gasto" data-index="${index}">Eliminar Gasto</button></td>
+            `;
+            HTML.append(tr);
+        });
+
+        // Agregar eventos de click a los botones de eliminar
+        const deleteButtons = HTML.querySelectorAll(".delete-btn-gasto");
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const index = this.getAttribute("data-index"); // Obtener el índice desde el atributo data-index
+                gastos.splice(index, 1); // Eliminar del array
+                tableRender(idHtmlGasto);//renderizar
+                localStorage.setItem("gastos", JSON.stringify(gastos));// Actualizar en el localStorage
+            });
+        });
+
+        // for(const gasto of gastos) {
+        //     const tr = document.createElement("tr");
+        //         tr.innerHTML = `
+        //         <td>${gasto.obra}</td>
+        //         <td>${gasto.concepto}</td>
+        //         <td>${gasto.rubro}</td>
+        //         <td>${gasto.fecha}</td>
+        //         <td>${gasto.unidad}</td>
+        //         <td>${gasto.cantidad}</td>
+        //         <td>AR$ ${gasto.pUnitArs}</td>
+        //         <td>${gasto.conversionArsUsd}</td>
+        //         <td>AR$ ${gasto.montoArs}</td>
+        //         <td>U$D ${gasto.montoUsd}</td>
+        //         `;
+        //         HTML.append(tr);
+        // }
     }else {
         return;
     }
 }
 
 
-/*
-#################################################################################################################################
-2 - CREAR GASTO
-*/
-
-function gastoNuevo(){
-    const nombre = prompt("Ingrese el nombre de la obra a la que pertenece el gasto"); //esto deberia ser un desplegable con op.
-    const concepto = prompt("Ingrese el concepto del gasto");
-    const rubro = prompt("Ingrese el rubro al cual pertence el gasto");
-    let fecha = prompt("Ingrese la fecha del gasto formato: dd/mm/aaaa, si no ingresa nada se tomara la fecha actual.");
-    const unidad = prompt("Ingrese la undidad en la cual se computa el gasto, ej: m, un, gl");
-    const cantidad = parseInt(prompt("Ingrese la cantidad de unidades, si es global [gl] ingrese 1"));
-    const pUnitArs = parseFloat(prompt("Ingrese el precio unitario del gasto, en caso de ser global [gl] ingrese el total"));
-    const presupuesto = parseFloat(prompt("Ingrese el monto en AR$ destinado para la obra"));
-    const conversion = parseFloat(prompt("Ingrese la cotizacion de dolar que se utilizo para la compra"));
-
-    if(fecha == ""){
-        fecha = obtenerFechaActual()
-    }
-
-    const monto = (cantidad * pUnitArs) / conversion
-    
-    const gastoN = new Gasto(nombre, concepto, rubro, fecha, unidad, cantidad, pUnitArs, presupuesto, conversion, monto);
-}
 /*
 #################################################################################################################################
 OBTENER FECHA EN FORMATO NORMAL
@@ -238,25 +378,36 @@ const obtenerFechaActual = () => {
 #################################################################################################################################
 CARGA DE DATOS ALMACENADOS
 */
-const obras = [];
+const obras = []; //inicializacion array almacenamiento de obras
+const gastos = []; //inicializacion array almacenamiento de gastos
+
 if(localStorage.getItem("obras") != null){
     const localSavedObras = JSON.parse(localStorage.getItem("obras"));
     for (const savedObra of localSavedObras){
         obras.push(new Obra(savedObra.nombreObra, savedObra.fechaDeInicio, savedObra.Descripcion, savedObra.presupuestoGeneral));
-    };
-
+};
 } else {
-    loadTestDataObras()
-    loadTestDataGastos()
-} //falta pedirle que carge los Gastos almacenados en storage
+    loadTestDataObras() //si no hay datos locales, toma los del json
+}
 
+if(localStorage.getItem("gastos") != null){
+    const localSavedGastos = JSON.parse(localStorage.getItem("gastos"));
+    for (const savedGasto of localSavedGastos){
+        gastos.push(new Gasto(savedGasto.obra, savedGasto.concepto, savedGasto.rubro, savedGasto.fecha, savedGasto.unidad, savedGasto.cantidad, savedGasto.pUnitArs, savedGasto.conversionArsUsd, savedGasto.montoArs, savedGasto.montoUsd));
+    };
+} else {
+    loadTestDataGastos() //si no hay datos locales, toma los del json
+};
+
+
+//renderizar
+tableRender(idHtmlObra);
+tableRender(idHtmlGasto);
 
 /*
 #################################################################################################################################
 OBTENER DATOS PARA TEST "PRECARGA" JSON
 */
-const gastos = [];
-
 function loadTestDataObras(){
     fetch("/obras.json")
     .then((response) => response.json()) // esto convierte la respuesta JSON, no hace falta parsear!
