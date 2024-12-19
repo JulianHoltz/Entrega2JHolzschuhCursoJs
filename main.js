@@ -284,9 +284,32 @@ function tableRender(htmlId){
         deleteButtons.forEach(button => {
             button.addEventListener("click", function () {
                 const index = this.getAttribute("data-index"); // Obtener el índice desde el atributo data-index
-                obras.splice(index, 1); // Eliminar del array
-                tableRender(htmlId); // Volver a renderizar la tabla
-                localStorage.setItem("obras", JSON.stringify(obras));
+
+                Swal.fire({
+                    title: 'Atencion!',
+                    text: '¿Estas seguro que deseas eliminar esta Obra?, si lo haces todos los gastos adjuntos se perderan tambien',
+                    icon: 'warning',
+                    iconColor: '#f4be20',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    confirmButtonColor: '#f4be20',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    if (result.isConfirmed) { //quiero eliminarlo
+                        console.log('La obra fue eliminada.');
+                        obras.splice(index, 1); // Eliminar del array
+                        tableRender(htmlId); // Volver a renderizar la tabla
+
+                        //Hay que agregar que busque todos los gastos asociados y los elimine....
+                        
+                        localStorage.setItem("obras", JSON.stringify(obras));
+                    } else if (result.dismiss === Swal.DismissReason.cancel) { //quiero conservarlo
+                        console.log('Operación cancelada.');
+                    }
+                });
+
+
+
             });
         });
 
@@ -331,9 +354,28 @@ function tableRender(htmlId){
         deleteButtons.forEach(button => {
             button.addEventListener("click", function () {
                 const index = this.getAttribute("data-index"); // Obtener el índice desde el atributo data-index
-                gastos.splice(index, 1); // Eliminar del array
-                tableRender(idHtmlGasto);//renderizar
-                localStorage.setItem("gastos", JSON.stringify(gastos));// Actualizar en el localStorage
+
+                //ALERTA DE ELIMINACION
+                Swal.fire({
+                    title: 'Atencion!',
+                    text: '¿Estas seguro que deseas eliminar este gasto?',
+                    icon: 'warning',
+                    iconColor: '#f4be20',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    confirmButtonColor: '#f4be20',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    if (result.isConfirmed) { //quiero eliminarlo
+                        console.log('El gasto fue eliminado.');
+                        gastos.splice(index, 1); // Eliminar del array
+                        tableRender(idHtmlGasto);//renderizar
+                        localStorage.setItem("gastos", JSON.stringify(gastos));// Actualizar en el localStorage
+                    } else if (result.dismiss === Swal.DismissReason.cancel) { //quiero conservarlo
+                        console.log('Operación cancelada.');
+                    }
+                });
+
             });
         });
 
